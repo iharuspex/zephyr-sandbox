@@ -1,2 +1,1 @@
-# zephyr-sandbox
-Zephyr Sandbox Application
+# Zephyr sandbox project

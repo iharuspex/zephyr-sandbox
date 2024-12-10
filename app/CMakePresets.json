@@ -1,0 +1,170 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 27,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ninja",
+      "displayName": "Ninja",
+      "hidden": true,
+      "description": "Default build using Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceParentDir}/build",
+      "installDir": "${sourceParentDir}"
+    },
+    {
+      "name": "debug",
+      "inherits": "ninja",
+      "displayName": "Debug",
+      "description": "Debug build using Ninja generator",
+      "cacheVariables": {
+        "EXTRA_CONF_FILE": "${sourceDir}/debug.conf"
+      }
+    },
+    {
+      "name": "release",
+      "inherits": "ninja",
+      "displayName": "Release",
+      "description": "Release build using Ninja generator",
+      "cacheVariables": {
+        "EXTRA_CONF_FILE": "${sourceDir}/release.conf"
+      }
+    },
+    {
+      "name": "minsize",
+      "inherits": "ninja",
+      "displayName": "MinSize",
+      "description": "MinSize build using Ninja generator",
+      "cacheVariables": {
+        "EXTRA_CONF_FILE": "${sourceDir}/minsize.conf"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "minsize",
+      "configurePreset": "minsize"
+    },
+    {
+      "name": "install-debug",
+      "inherits": "debug",
+      "targets": ["install"]
+    },
+    {
+      "name": "install-release",
+      "inherits": "release",
+      "targets": ["install"]
+    },
+    {
+      "name": "install-minsize",
+      "inherits": "minsize",
+      "targets": ["install"]
+    },
+    {
+      "name": "flash-debug",
+      "inherits": "debug",
+      "targets": ["flash"]
+    },
+    {
+      "name": "flash-release",
+      "inherits": "release",
+      "targets": ["flash"]
+    },
+    {
+      "name": "flash-minsize",
+      "inherits": "minsize",
+      "targets": ["flash"]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "debug"
+        },
+        {
+          "type": "build",
+          "name": "debug"
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "release"
+        }
+      ]
+    },
+    {
+      "name": "minsize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "minsize"
+        },
+        {
+          "type": "build",
+          "name": "install-minsize"
+        }
+      ]
+    },
+    {
+      "name": "flash-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "debug"
+        },
+        {
+          "type": "build",
+          "name": "flash-debug"
+        }
+      ]
+    },
+    {
+      "name": "flash-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "flash-release"
+        }
+      ]
+    },
+    {
+      "name": "flash-minsize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "minsize"
+        },
+        {
+          "type": "build",
+          "name": "flash-minsize"
+        }
+      ]
+    }
+  ]
+}
