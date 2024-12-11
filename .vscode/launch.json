@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "st-link",
+            "name": "bluepill-st-link",
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
             "request": "launch",
@@ -20,7 +20,7 @@
             ]
         },
         {
-            "name": "jlink",
+            "name": "bluepill-jlink",
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
             "request": "launch",
@@ -33,6 +33,20 @@
             "configFiles": [
                 "${workspaceFolder}/openocd-jlink.cfg"
             ]
+        },
+        {
+            "name": "bbc_microbit",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "pyocd",
+            "toolchainPrefix": "arm-zephyr-eabi",
+            "serverpath": "/home/haruspex/zephyrproject/.venv/bin/pyocd",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "targetId": "nrf51822"
         }
     ]
 }

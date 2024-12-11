@@ -1,7 +1,8 @@
 {
     "cmake.sourceDirectory": "/home/haruspex/projects/zephyr/zephyr-sandbox/app",
     "files.associations": {
-        "sensor.h": "c"
+        "sensor.h": "c",
+        "typeinfo": "c"
     },
     "devicetree.defaultBoard": "stm32_min_dev",
     "sarif-viewer.connectToGithubCodeScanning": "off",

@@ -1,0 +1,21 @@
+/ {
+	zephyr,user {
+		pwms = <&sw_pwm 0 PWM_USEC(1500) PWM_POLARITY_NORMAL>;
+	};
+
+    aliases {
+        led0 = &myled0;
+    };
+
+    leds {
+        compatible = "gpio-leds";
+        myled0: led0 {
+            gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
+        };
+    };
+};
+
+&sw_pwm {
+	status = "okay";
+	channel-gpios = <&edge_connector 0 GPIO_ACTIVE_HIGH>;
+};
