@@ -4,5 +4,6 @@
         "sensor.h": "c"
     },
     "devicetree.defaultBoard": "stm32_min_dev",
-    "sarif-viewer.connectToGithubCodeScanning": "off"
+    "sarif-viewer.connectToGithubCodeScanning": "off",
+    "cortex-debug.variableUseNaturalFormat": true
 }

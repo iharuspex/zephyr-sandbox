@@ -5,15 +5,33 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Zephyr App Debug",
+            "name": "st-link",
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",
             "servertype": "openocd",
+            "toolchainPrefix": "arm-zephyr-eabi-",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
             "configFiles": [
                 "${workspaceFolder}/deps/zephyr/zephyr/boards/others/stm32_min_dev/support/openocd.cfg"
+            ]
+        },
+        {
+            "name": "jlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "toolchainPrefix": "arm-zephyr-eabi-",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "configFiles": [
+                "${workspaceFolder}/openocd-jlink.cfg"
             ]
         }
     ]
