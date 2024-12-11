@@ -1,3 +1,14 @@
+&timers3 {
+	st,prescaler = <10000>;
+	status = "okay";
+
+	pwm3: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim3_ch1_pwm_out_pa6>;
+		pinctrl-names = "default";
+	};
+};
+
 &pinctrl {
     swj-cfg = "jtag-disable";
 };
