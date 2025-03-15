@@ -13,9 +13,34 @@
             gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
         };
     };
+
+    buttons: gpio_keys {
+		compatible = "gpio-keys";
+		buttonA: button_0 {
+			label = "BTN_A";
+			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
+			zephyr,code = <INPUT_KEY_A>;
+		};
+
+		buttonB: button_1 {
+			label = "BTN_B";
+			gpios = <&gpio0 26 GPIO_ACTIVE_LOW>;
+			zephyr,code = <INPUT_KEY_B>;
+		};
+	};
+
+    longpress: longpress {
+        input = <&buttons>;
+        compatible = "zephyr,input-longpress";
+        input-codes = <INPUT_KEY_B>;
+		short-codes = <INPUT_KEY_0>;
+		long-codes = <INPUT_KEY_1>;
+		long-delay-ms = <1000>;
+    };
 };
 
 &sw_pwm {
 	status = "okay";
+	clock-prescaler = <0>;
 	channel-gpios = <&edge_connector 0 GPIO_ACTIVE_HIGH>;
 };
