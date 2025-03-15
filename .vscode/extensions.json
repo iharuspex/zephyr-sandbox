@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "natqe.reload",
+        "trond-snekvik.devicetree",
+        "marus25.cortex-debug",
+        "ms-vscode.cpptools-extension-pack",
+        "dan-c-underwood.arm",
+        "ms-python.python"
+    ]
+}
