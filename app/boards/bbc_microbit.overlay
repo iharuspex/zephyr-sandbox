@@ -39,8 +39,10 @@
     };
 };
 
-&sw_pwm {
-	status = "okay";
-	clock-prescaler = <0>;
-	channel-gpios = <&edge_connector 0 GPIO_ACTIVE_HIGH>;
+&i2c0 {
+	lm75: lm75@48 {
+		status = "okay";
+		reg = <0x48>;
+		compatible = "lm75";
+	};
 };
