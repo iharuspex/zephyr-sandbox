@@ -4,7 +4,7 @@
         "sensor.h": "c",
         "typeinfo": "c"
     },
-    "devicetree.defaultBoard": "stm32_min_dev",
+    "devicetree.defaultBoard": "rocket_flight_logger",
     "sarif-viewer.connectToGithubCodeScanning": "off",
     "cortex-debug.variableUseNaturalFormat": true
 }

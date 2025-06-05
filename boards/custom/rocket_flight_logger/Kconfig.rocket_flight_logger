@@ -1,5 +1,5 @@
 # Copyright (c) 2021 Nordic Semiconductor ASA
 # SPDX-License-Identifier: Apache-2.0
 
-config BOARD_CUSTOM_PLANK
-	select SOC_NRF52840_QIAA
+config BOARD_ROCKET_FLIGHT_LOGGER
+	select SOC_STM32F103X8

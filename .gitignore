@@ -3,6 +3,9 @@
 *.swp
 *~
 
+# clangd
+.cache
+
 # python
 .venv
 

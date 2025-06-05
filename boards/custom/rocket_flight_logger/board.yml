@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 board:
-  name: custom_plank
-  vendor: vendor
+  name: rocket_flight_logger
+  vendor: custom
   socs:
-    - name: nrf52840
+    - name: stm32f103xb
