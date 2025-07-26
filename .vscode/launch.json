@@ -47,6 +47,21 @@
             "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
             "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
             "targetId": "nrf51822"
-        }
+        },
+        {
+            "name": "black_f407ve-st-link",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "toolchainPrefix": "arm-zephyr-eabi-",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "configFiles": [
+                "${workspaceFolder}/deps/zephyr/zephyr/boards/others/black_f407ve/support/openocd.cfg"
+            ]
+        },
     ]
 }
