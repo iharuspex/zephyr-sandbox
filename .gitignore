@@ -20,7 +20,6 @@ __pycache__/
 
 # deps
 deps/
-modules/
 
 # backup
 *.zip
