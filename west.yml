@@ -14,3 +14,4 @@ manifest:
           - cmsis
           - hal_nordic
           - hal_stm32
+          - fatfs
