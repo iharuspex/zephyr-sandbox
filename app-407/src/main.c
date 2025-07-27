@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 
 #include <zephyr/kernel.h>
@@ -7,6 +8,7 @@
 #include <zephyr/drivers/disk.h>
 #include <zephyr/drivers/spi.h>
 #include <zephyr/drivers/gpio.h>
+#include "zephyr/drivers/display.h"
 #include "zephyr/drivers/regulator.h"
 #include <zephyr/storage/disk_access.h>
 #include <ff.h>
@@ -14,7 +16,13 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
+#define DISPLAY_WIDTH 76
+#define DISPLAY_HEIGHT 284
+#define PIXEL_SIZE 2
+static uint8_t buf[DISPLAY_WIDTH * DISPLAY_HEIGHT * PIXEL_SIZE];
+
 static const struct device *lcd_led_reg = DEVICE_DT_GET(DT_NODELABEL(lcd_led_reg));
+const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 
 #define MOUNT_POINT "/SD:"
 
@@ -104,6 +112,26 @@ static int fatfs_mount(void)
     return ret;
 }
 
+void fill_rgb565(uint16_t color)
+{
+    struct display_buffer_descriptor desc = {
+        .width = DISPLAY_WIDTH,
+        .height = DISPLAY_HEIGHT,
+        .pitch = DISPLAY_WIDTH,
+        .buf_size = sizeof(buf),
+    };
+
+    for (int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++) {
+        buf[i * 2]     = (color >> 8) & 0xFF;
+        buf[i * 2 + 1] = color & 0xFF;
+    }
+
+    int ret = display_write(display, 0, 0, &desc, buf);
+    if (ret != 0) {
+        LOG_ERR("Display write failed: %d", ret);
+    }
+}
+
 int main(void) 
 {
     int ret;
@@ -113,7 +141,13 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    if (!device_is_ready(display)) {
+        LOG_ERR("Display is not ready");
+    }
+
     regulator_enable(lcd_led_reg);
+
+    fill_rgb565(0xF800);
 
     ret = fatfs_mount();
     if (ret != 0) {
