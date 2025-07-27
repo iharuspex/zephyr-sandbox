@@ -1,0 +1,1 @@
+add_subdirectory_ifdef(CONFIG_ST7789V_SPI st7789v_spi)

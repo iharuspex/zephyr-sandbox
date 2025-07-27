@@ -1,0 +1,2 @@
+zephyr_library()
+zephyr_library_sources(display_st7789v_spi.c)

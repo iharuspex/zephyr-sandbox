@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <stdlib.h>
 
 #include <zephyr/kernel.h>
@@ -6,11 +5,16 @@
 #include <zephyr/fs/fs.h>
 #include <zephyr/fs/fs_interface.h>
 #include <zephyr/drivers/disk.h>
+#include <zephyr/drivers/spi.h>
+#include <zephyr/drivers/gpio.h>
+#include "zephyr/drivers/regulator.h"
 #include <zephyr/storage/disk_access.h>
 #include <ff.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
+
+static const struct device *lcd_led_reg = DEVICE_DT_GET(DT_NODELABEL(lcd_led_reg));
 
 #define MOUNT_POINT "/SD:"
 
@@ -20,6 +24,7 @@ static struct fs_mount_t fat_fs_mnt = {
     .type = FS_FATFS,
     .mnt_point = MOUNT_POINT,
     .fs_data = &fatfs_fs,
+    .storage_dev = (void *)"SD",
 };
 
 static void ls_dir(const char *path)
@@ -52,7 +57,7 @@ static void ls_dir(const char *path)
     fs_closedir(&dirp);
 }
 
-static int fatfs_mount()
+static int fatfs_mount(void)
 {
     int ret;
 
@@ -87,9 +92,6 @@ static int fatfs_mount()
         memory_size_mb = (uint64_t)sector_count * sector_size;
         LOG_INF("Memory size (MB) %u", (uint32_t)(memory_size_mb >> 20));
 
-        // Mount drive
-        fat_fs_mnt.storage_dev = (void *)"SD";
-
         ret = fs_mount(&fat_fs_mnt);
         if (ret != 0) {
             LOG_ERR("Mount failed: %d", ret);
@@ -105,6 +107,13 @@ static int fatfs_mount()
 int main(void) 
 {
     int ret;
+
+    if (!device_is_ready(lcd_led_reg)) {
+        LOG_ERR("LED regulator is not ready");
+        return EXIT_FAILURE;
+    }
+
+    regulator_enable(lcd_led_reg);
 
     ret = fatfs_mount();
     if (ret != 0) {
