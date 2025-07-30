@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/spi.h>
 #include <zephyr/drivers/gpio.h>
@@ -256,6 +257,39 @@ static int st7789v_set_orientation(const struct device *dev,
     return -ENOTSUP;
 }
 
+static void st7789v_lcd_init_test(const struct device *dev)
+{
+    struct st7789v_data *data = dev->data;
+    const struct st7789v_config *config = dev->config;
+    uint8_t tmp[5] = { 0 };
+
+    st7789v_transmit(dev, ST7789V_CMD_SW_RESET, NULL, 0);
+    k_sleep(K_MSEC(150));
+    st7789v_transmit(dev, ST7789V_CMD_SLEEP_OUT, NULL, 0);
+    k_sleep(K_MSEC(10));
+
+    tmp[0] = config->colmod;
+    st7789v_transmit(dev, ST7789V_CMD_COLMOD, tmp, 1);
+    k_sleep(K_MSEC(10));
+
+    tmp[0] = config->mdac;
+    st7789v_transmit(dev, ST7789V_CMD_MADCTL, tmp, 1);
+
+    tmp[0] = 0x00; tmp[1] = 0x00; tmp[2] = 0x00; tmp[3] = 240;
+    st7789v_transmit(dev, ST7789V_CMD_CASET, tmp, 4);
+    tmp[0] = 0x00; tmp[1] = 0x00; tmp[2] = 320 >> 8; tmp[3] = 320 & 0xFF;
+    st7789v_transmit(dev, ST7789V_CMD_RASET, tmp, 4);
+
+    st7789v_transmit(dev, ST7789V_CMD_INV_ON, NULL, 0);
+    k_sleep(K_MSEC(10));
+
+    st7789v_transmit(dev, 0x13, NULL, 0);
+    k_sleep(K_MSEC(10));
+
+    st7789v_transmit(dev, ST7789V_CMD_DISP_ON, NULL, 0);
+    k_sleep(K_MSEC(10));
+}
+
 static void st7789v_lcd_init(const struct device *dev)
 {
     struct st7789v_data *data = dev->data;
@@ -362,13 +396,14 @@ static int st7789v_init(const struct device *dev)
         return -EIO;
     }
 
-    st7789v_reset_display(dev);
+    // st7789v_reset_display(dev);
 
-    st7789v_blanking_on(dev);
+    // st7789v_blanking_on(dev);
 
-    st7789v_lcd_init(dev);
+    // st7789v_lcd_init(dev);
+    st7789v_lcd_init_test(dev);
 
-    st7789v_exit_sleep(dev);
+    // st7789v_exit_sleep(dev);
 
     return 0;
 }

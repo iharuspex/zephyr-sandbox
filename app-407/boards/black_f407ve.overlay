@@ -36,16 +36,16 @@
         width = <76>;
         height = <284>;
 
-        x-offset = <0>;
-        y-offset = <0>;
+        x-offset = <82>;
+        y-offset = <18>;
 
         vcom = <0x19>;
         gctrl = <0x35>;
         vrhs = <0x12>;
         vdvs = <0x20>;
-        mdac = <0x00>;
+        mdac = <0x08>;
         lcm = <0x2c>;
-        colmod = <0x05>;
+        colmod = <0x55>;
         gamma = <0x01>;
         porch-param = [0c 0c 00 33 33];
         cmd2en-param = [5a 69 02 01];
@@ -54,5 +54,6 @@
         nvgam-param = [d0 04 0c 11 13 2c 3f 44 51 2f 1f 1f 20 23];
         ram-param = [00 f0];
         rgb-param = [cd 08 14];
+        inverted-sck;
     };
 };

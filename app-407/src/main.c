@@ -8,10 +8,18 @@
 #include <zephyr/drivers/disk.h>
 #include <zephyr/drivers/spi.h>
 #include <zephyr/drivers/gpio.h>
+#include "core/lv_obj.h"
+#include "core/lv_obj_style_gen.h"
+#include "lv_api_map_v8.h"
+#include "lv_init.h"
+#include "misc/lv_color.h"
+#include "misc/lv_palette.h"
+#include "misc/lv_timer.h"
 #include "zephyr/drivers/display.h"
 #include "zephyr/drivers/regulator.h"
 #include <zephyr/storage/disk_access.h>
 #include <ff.h>
+#include <lvgl.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
@@ -132,6 +140,8 @@ void fill_rgb565(uint16_t color)
     }
 }
 
+#define BLUE_COLOR lv_color_hex(0x0000FF)
+
 int main(void) 
 {
     int ret;
@@ -147,7 +157,13 @@ int main(void)
 
     regulator_enable(lcd_led_reg);
 
-    fill_rgb565(0xF800);
+    // fill_rgb565(0xFFE0);
+
+    lv_init();
+    lv_obj_t *scr = lv_scr_act();
+
+    lv_obj_set_style_bg_color(scr, BLUE_COLOR, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(scr, LV_OPA_COVER, LV_PART_MAIN);
 
     ret = fatfs_mount();
     if (ret != 0) {
@@ -155,6 +171,11 @@ int main(void)
     }
     
     ls_dir(MOUNT_POINT);
+
+    while (1) {
+        lv_timer_handler();
+        k_sleep(K_MSEC(10));
+    }
 
     return EXIT_SUCCESS;
 }
