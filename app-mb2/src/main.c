@@ -1,44 +1,65 @@
+#include "zephyr/bluetooth/conn.h"
+#include <stdint.h>
 #include <stdio.h>
 
-#include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/bluetooth/bluetooth.h>
+#include <zephyr/bluetooth/hci.h>
+#include <zephyr/bluetooth/gatt.h>
+
+#include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-#include <zephyr/drivers/pwm.h>
 #include <zephyr/device.h>
 
-#define DELAY_MS 300
+#include "lsm303_ll.h"
+#include "zephyr/sys/printk.h"
 
-#define LED0_NODE DT_ALIAS(led0)
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+static struct bt_conn *current_conn;
 
-int main(void)
+uint32_t stepcount_value = 0;
+
+static void connected(struct bt_conn *conn, uint8_t err)
 {
-	int ret;
-	bool led_state = true;
 
-	printk("Zephyr Sandbox App\n");
+}
 
-	if (!gpio_is_ready_dt(&led)) {
-		return 0;
+static void disconnected(struct bt_conn *conn, uint8_t reason)
+{
+
+}
+
+static struct bt_conn_cb conn_callbacks = {
+	.connected = connected,
+	.disconnected = disconnected,
+};
+
+int main(void) {
+	int err;
+	int old_stepcount = 0;
+	err = lsm303_ll_begin();
+	if (err < 0) {
+		printk("\nError initializing lsm303.  Error code = %d\n",err);
+		return 1;
 	}
 
-	ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
-	if (ret < 0) {
-		return 0;
+	if (lsm303_countSteps(&stepcount_value) < 0)
+	{
+		printk("Error starting step counter\n");
+		while(1);
 	}
+
+	// err = bt_enable(NULL);
+	// bt_conn_cb_register(&conn_callbacks);
 
 	while (1) {
-		ret = gpio_pin_toggle_dt(&led);
-		if (ret < 0) {
-			return 0;
-		}
+		k_msleep(100);
 
-		led_state = !led_state;
-		printf("LED state: %s\n", led_state ? "ON" : "OFF");
-		k_msleep(DELAY_MS);
+		if (stepcount_value != old_stepcount) {
+			old_stepcount = stepcount_value;
+			printk("Steps: %d\n", stepcount_value);
+		}
 	}
 
 	return 0;
 }
-

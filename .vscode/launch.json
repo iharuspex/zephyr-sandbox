@@ -49,6 +49,20 @@
             "targetId": "nrf51822"
         },
         {
+            "name": "bbc_microbit_v2",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "pyocd",
+            "toolchainPrefix": "arm-zephyr-eabi",
+            "serverpath": "/home/haruspex/zephyrproject/.venv/bin/pyocd",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+            "targetId": "nrf52833",
+        },
+        {
             "name": "black_f407ve-st-link",
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
