@@ -32,7 +32,7 @@
         reg = <0>;
         cmd-data-gpios = <&gpiod 3 GPIO_ACTIVE_LOW>;
         reset-gpios = <&gpiod 5 GPIO_ACTIVE_LOW>;
-        
+
         width = <76>;
         height = <284>;
 
