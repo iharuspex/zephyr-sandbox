@@ -77,5 +77,21 @@
                 "${workspaceFolder}/deps/zephyr/zephyr/boards/others/black_f407ve/support/openocd.cfg"
             ]
         },
+        {
+            "name": "esp32c3_mini",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "toolchainPrefix": "riscv64-zephyr-elf-",
+            "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/riscv64-zephyr-elf/bin",
+            "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb",
+            "serverpath": "", // FIXME
+            "configFiles": [
+                "${workspaceFolder}/deps/zephyr/zephyr/boards/others/esp32c3_supermini/support/openocd.cfg"
+            ]
+        }
     ]
 }
