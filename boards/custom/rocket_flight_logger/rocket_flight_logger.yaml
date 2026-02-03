@@ -1,8 +1,5 @@
-# Copyright (c) 2021 Nordic Semiconductor ASA
-# SPDX-License-Identifier: Apache-2.0
-
 identifier: rocket_flight_logger
-name: Custom-Plank
+name: Rocket Flight Logger
 vendor: custom
 type: mcu
 arch: arm
@@ -15,3 +12,5 @@ toolchain:
 supported:
   - gpio
   - i2c
+  - spi
+  - uart
