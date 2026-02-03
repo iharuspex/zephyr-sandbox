@@ -1,0 +1,3 @@
+&clk_lse {
+	status = "disabled";
+};

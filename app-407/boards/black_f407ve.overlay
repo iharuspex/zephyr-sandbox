@@ -8,6 +8,48 @@
         regulator-name = "LCD_LED_REG";
         enable-gpios = <&gpiod 7 GPIO_ACTIVE_HIGH>;
     };
+
+    // my_mipi_dbi {
+    //     compatible = "zephyr,mipi-dbi-spi";
+    //     status = "okay";
+    //     #address-cells = <1>;
+    //     #size-cells = <0>;
+    //     spi-dev = <&spi3>;
+    //     dc-gpios = <&gpiod 3 GPIO_ACTIVE_LOW>;
+    //     reset-gpios = <&gpiod 5 GPIO_ACTIVE_LOW>;
+
+    //     st7789v: st7789v@0 {
+    //         compatible = "sitronix,st7789v";
+    //         reg = <0>;
+
+    //         mipi-max-frequency = <DT_FREQ_M(100)>;
+
+    //         inversion-off;
+    //         mipi-mode = "MIPI_DBI_MODE_SPI_4WIRE";
+
+    //         width = <76>;
+    //         height = <284>;
+
+    //         x-offset = <82>;
+    //         y-offset = <18>;
+
+    //         vcom = <0x19>;
+    //         gctrl = <0x35>;
+    //         vrhs = <0x12>;
+    //         vdvs = <0x20>;
+    //         mdac = <0x08>;
+    //         lcm = <0x2c>;
+    //         colmod = <0x55>;
+    //         gamma = <0x01>;
+    //         porch-param = [0c 0c 00 33 33];
+    //         cmd2en-param = [5a 69 02 01];
+    //         pwctrl1-param = [a4 a1];
+    //         pvgam-param = [d0 04 0d 11 13 2b 3f 54 4c 18 0d 0B 1f 23];
+    //         nvgam-param = [d0 04 0c 11 13 2c 3f 44 51 2f 1f 1f 20 23];
+    //         ram-param = [00 f0];
+    //         rgb-param = [cd 08 14];
+    //     };
+    // };
 };
 
 &sdmmc1 {
@@ -54,6 +96,6 @@
         nvgam-param = [d0 04 0c 11 13 2c 3f 44 51 2f 1f 1f 20 23];
         ram-param = [00 f0];
         rgb-param = [cd 08 14];
-        inverted-sck;
+        // inverted-sck;
     };
 };

@@ -77,14 +77,16 @@ static void st7789v_transmit(const struct device *dev, uint8_t cmd,
     struct spi_buf tx_buf = { .buf = &cmd, .len = 1 };
     struct spi_buf_set tx_bufs = { .buffers = &tx_buf, .count = 1 };
 
+    int ret;
+
     st7789v_set_cmd(dev, 1);
-    spi_write_dt(&config->bus, &tx_bufs);
+    ret = spi_write_dt(&config->bus, &tx_bufs);
 
     if (tx_data != NULL) {
         tx_buf.buf = tx_data;
         tx_buf.len = tx_count;
         st7789v_set_cmd(dev, 0);
-        spi_write_dt(&config->bus, &tx_bufs);
+        ret = spi_write_dt(&config->bus, &tx_bufs);
     }
 }
 
@@ -446,7 +448,8 @@ static const struct display_driver_api st7789v_api = {
 #define ST7789V_INIT(inst)                                                  \
     static const struct st7789v_config st7789v_config_ ## inst = {          \
         .bus = SPI_DT_SPEC_INST_GET(inst, SPI_OP_MODE_MASTER |              \
-                SPI_WORD_SET(8) | (DT_INST_PROP(inst, inverted_sck) ? SPI_MODE_CPOL : 0), 0), \
+                SPI_WORD_SET(8) |                                           \
+                (DT_INST_PROP(inst, inverted_sck) ? SPI_MODE_CPOL : 0), 0), \
         .cmd_data_gpio = GPIO_DT_SPEC_INST_GET(inst, cmd_data_gpios),       \
         .reset_gpio = GPIO_DT_SPEC_INST_GET_OR(inst, reset_gpios, {}),      \
         .vcom = DT_INST_PROP(inst, vcom),                                   \
