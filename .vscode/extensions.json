@@ -5,6 +5,7 @@
         "marus25.cortex-debug",
         "ms-vscode.cpptools-extension-pack",
         "dan-c-underwood.arm",
-        "ms-python.python"
+        "ms-python.python",
+        "nordic-semiconductor.nrf-devicetree"
     ]
 }

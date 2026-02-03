@@ -5,6 +5,7 @@
         "typeinfo": "c"
     },
     "devicetree.defaultBoard": "rocket_flight_logger",
+    "devicetree.zephyr": "${workspaceFolder}/deps/zephyr/zephyr",
     "sarif-viewer.connectToGithubCodeScanning": "off",
     "cortex-debug.variableUseNaturalFormat": true
 }

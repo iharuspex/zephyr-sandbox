@@ -5,7 +5,7 @@
 
 /dts-v1/;
 #include <st/f1/stm32f103X8.dtsi>
-#include <st/f1/stm32f103r(8-b)tx-pinctrl.dtsi>
+#include <st/f1/stm32f103c(8-b)tx-pinctrl.dtsi>
 
 / {
 	model = "Rocket Flight Logger Board";
@@ -70,7 +70,7 @@
 };
 
 &spi1 {
-	pinctrl-0 = <&spi1_sck_pb3 &spi1_miso_pb4 &spi1_mosi_pb5>;
+	pinctrl-0 = <&spi1_sck_remap1_master_pb3 &spi1_miso_remap1_master_pb4 &spi1_mosi_remap1_master_pb5>;
 	pinctrl-names = "default";
 	status = "okay";
 	cs-gpios = <&gpioa 15 GPIO_ACTIVE_LOW>;
@@ -86,8 +86,8 @@
 		sector-size = <270336>;
 		block-size = <2112>;
 		page-size = <264>;
-		enter-dpd-delay = <>;
-		exit-dpd-delay = <>;
+		// enter-dpd-delay = <>;
+		// exit-dpd-delay = <>;
 
 		partitions {
 			compatible = "fixed-partitions";
@@ -99,5 +99,26 @@
 				reg = <0x00000000 0x00100000>;
 			};
 		};
+	};
+};
+
+&spi2 {
+	pinctrl-0 = <&spi2_sck_master_pb13 &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
+	pinctrl-names = "default";
+	status = "disabled";
+	cs-gpios = <&gpiob 12 GPIO_ACTIVE_LOW>;
+
+	// BMP280
+};
+
+&i2c2 {
+	pinctrl-0 = <&i2c2_scl_pb10 &i2c2_sda_pb11>;
+	pinctrl-names = "default";
+	status = "okay";
+
+	mpu6050: mpu6050@68 {
+		compatible = "invensense,mpu6050";
+		reg = <0x68>;
+		int-gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
 	};
 };
