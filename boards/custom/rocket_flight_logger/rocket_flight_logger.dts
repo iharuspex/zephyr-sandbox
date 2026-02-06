@@ -17,16 +17,23 @@
 		zephyr,flash = &flash0;
 	};
 
-	leds {
-		compatible = "gpio-leds";
-		led: led {
-			gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
-			label = "LD";
-		};
-	};
+	// leds {
+	// 	compatible = "gpio-leds";
+	// 	led: led {
+	// 		gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+	// 		label = "LD";
+	// 	};
+	// };
 
-	aliases {
-		led0 = &led;
+	// aliases {
+	// 	led0 = &led;
+	// };
+
+	esp_en: regulator_esp_en {
+		compatible = "regulator-fixed";
+		regulator-name = "ESP_EN";
+		// enable-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
+		enable-gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
 	};
 };
 
@@ -55,12 +62,12 @@
 	pinctrl-names = "default";
 	status = "okay";
 
-	wifi: esp8266_wifi {
-		compatible = "espressif,esp-at";
-		status = "okay";
-		power-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
-	};
+	// wifi: esp8266_wifi {
+	// 	compatible = "espressif,esp-at";
+	// 	status = "okay";
+	// 	power-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
+	// 	reset-gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
+	// };
 };
 
 &spi1 {
@@ -96,18 +103,19 @@
 	};
 };
 
-&spi2 {
-	pinctrl-0 = <&spi2_sck_master_pb13 &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
-	pinctrl-names = "default";
-	status = "disabled";
-	cs-gpios = <&gpiob 12 GPIO_ACTIVE_LOW>;
+// &spi2 {
+// 	pinctrl-0 = <&spi2_sck_master_pb13 &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
+// 	pinctrl-names = "default";
+// 	status = "disabled";
+// 	cs-gpios = <&gpiob 12 GPIO_ACTIVE_LOW>;
 
-	bmp280: bmp280@76 {
-		compatible = "bosch,bme280";
-		status = "okay";
-		reg = <0x76>;
-	};
-};
+// 	bmp280: bmp280@76 {
+// 		compatible = "bosch,bme280";
+// 		status = "okay";
+// 		spi-max-frequency = <10000000>;
+// 		reg = <0x76>;
+// 	};
+// };
 
 &i2c2 {
 	pinctrl-0 = <&i2c2_scl_pb10 &i2c2_sda_pb11>;
