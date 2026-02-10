@@ -1,3 +1,17 @@
+/ {
+    leds {
+		compatible = "gpio-leds";
+		led: led {
+			gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+			label = "LD";
+		};
+	};
+
+	aliases {
+		led0 = &led;
+	};
+};
+
 &pinctrl {
     swj-cfg = "jtag-disable";
 };
