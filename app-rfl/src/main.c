@@ -1,8 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
-
 #include <string.h>
-#include <sys/_stdint.h>
+
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/uart.h>
@@ -10,15 +9,19 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/regulator.h>
 
+#include <zephyr/drivers/sensor.h>
+
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 #define DELAY_MS 300
 
 #define ESP_UART DEVICE_DT_GET(DT_NODELABEL(usart2))
+#define BME_SENSOR DEVICE_DT_GET(DT_NODELABEL(bmp280))
 
 static const struct device *uart = ESP_UART;
 const struct device *esp_en = DEVICE_DT_GET(DT_NODELABEL(esp_en));
+const struct device *bme = BME_SENSOR;
 
 static void esp_send(const char *cmd)
 {
@@ -66,15 +69,6 @@ static void uart_send_str(const char *s)
     }
 }
 
-static void test_uart(void) {
-	while (1) {
-		uint8_t c;
-		if (uart_poll_in(uart, &c) == 0) {
-			printk("%c", c);
-		}
-	}
-}
-
 static int esp_test_at(void)
 {
 	const char *cmd = "AT\r\n";
@@ -112,6 +106,11 @@ int main(void)
 		return -1;
 	}
 
+	if (!device_is_ready(bme)) {
+		printk("BME280 is not ready.\n");
+		return 0;
+	}
+
 	// test_uart();
 
 	// regulator_disable(esp_en);
@@ -130,19 +129,41 @@ int main(void)
 	char buf[256];
 	int pos = 0;
 
-	while (1) {
-		uint8_t c;
-		if (uart_poll_in(uart, &c) == 0) {
-			if (pos < sizeof(buf) - 1) {
-				buf[pos++] = c;
-				// buf[pos] = 0;
-			}
+	struct sensor_value val_temperature, val_humidity, val_pressure;
 
-			if (strstr(buf, "+DIST_STA_IP:")) {
-				send_page_ap(0);
-				pos = 0;
-			}
+	while (1) {
+		// uint8_t c;
+		// if (uart_poll_in(uart, &c) == 0) {
+		// 	if (pos < sizeof(buf) - 1) {
+		// 		buf[pos++] = c;
+		// 		// buf[pos] = 0;
+		// 	}
+
+		// 	if (strstr(buf, "+DIST_STA_IP:")) {
+		// 		send_page_ap(0);
+		// 		pos = 0;
+		// 	}
+		// }
+
+		rv = sensor_sample_fetch(bme);
+		if (rv) {
+			printk("sensor_sample_fetch failed ret %d\n", rv);
+			return 0;
 		}
+
+		rv = sensor_channel_get(bme, SENSOR_CHAN_AMBIENT_TEMP, &val_temperature);
+		rv = sensor_channel_get(bme, SENSOR_CHAN_PRESS, &val_pressure);
+		rv = sensor_channel_get(bme, SENSOR_CHAN_HUMIDITY, &val_humidity);
+
+		double temp = sensor_value_to_double(&val_temperature);
+		double press = sensor_value_to_double(&val_pressure);
+		double hum = sensor_value_to_double(&val_humidity);
+
+		printf("Temp = %f\r\nHum = %f\r\nPress = %f\r\n",
+			temp,
+			hum,
+			press);
+		k_sleep(K_MSEC(500));
 	}
 
 	return 0;
