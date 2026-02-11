@@ -23,6 +23,16 @@
 		regulator-name = "ESP_EN";
 		enable-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
 	};
+
+	esp_rst: regulator_esp_rst {
+		compatible = "regulator-fixed";
+		regulator-name = "ESP_RST";
+		enable-gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
+	};
+};
+
+&pinctrl {
+    swj-cfg = "jtag-disable";
 };
 
 &clk_hse {
@@ -56,13 +66,6 @@
 	current-speed = <115200>;
 	pinctrl-names = "default";
 	status = "okay";
-
-	// wifi: esp8266_wifi {
-	// 	compatible = "espressif,esp-at";
-	// 	status = "okay";
-	// 	power-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
-	// 	reset-gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
-	// };
 };
 
 &spi1 {
@@ -125,10 +128,4 @@
 		reg = <0x68>;
 		int-gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
 	};
-
-	// bme280: bme280@76 {
-	// 	compatible = "bosch,bme280";
-	// 	status = "okay";
-	// 	reg = <0x76>;
-	// };
 };

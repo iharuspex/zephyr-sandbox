@@ -1,0 +1,16 @@
+identifier: rocket_flight_logger
+name: Rocket Flight Logger
+vendor: custom
+type: mcu
+arch: arm
+ram: 20
+flash: 64
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - gpio
+  - i2c
+  - spi
+  - uart

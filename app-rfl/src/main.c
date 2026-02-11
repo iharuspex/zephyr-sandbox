@@ -16,17 +16,16 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 #define DELAY_MS 300
 
-#define ESP_UART DEVICE_DT_GET(DT_NODELABEL(usart2))
-#define BME_SENSOR DEVICE_DT_GET(DT_NODELABEL(bmp280))
+#define ESP8266_UART DEVICE_DT_GET(DT_NODELABEL(usart2))
+#define BARO_SENSOR DEVICE_DT_GET(DT_NODELABEL(bme280))
 
-static const struct device *uart = ESP_UART;
-const struct device *esp_en = DEVICE_DT_GET(DT_NODELABEL(esp_en));
-const struct device *bme = BME_SENSOR;
+static const struct device *esp8266 = ESP8266_UART;
+static const struct device *baro = BARO_SENSOR;
 
 static void esp_send(const char *cmd)
 {
 	for (size_t i = 0; i < strlen(cmd); i++) {
-		uart_poll_out(uart, cmd[i]);
+		uart_poll_out(esp8266, cmd[i]);
 	}
 }
 
@@ -65,7 +64,7 @@ static void send_page_ap(int link_id)
 static void uart_send_str(const char *s)
 {
     while (*s) {
-        uart_poll_out(uart, *s++);
+        uart_poll_out(esp8266, *s++);
     }
 }
 
@@ -82,7 +81,7 @@ static int esp_test_at(void)
 
 	while (k_uptime_get() < deadline) {
 		uint8_t c;
-		if (uart_poll_in(uart, &c) == 0) {
+		if (uart_poll_in(esp8266, &c) == 0) {
 			if (pos < sizeof(resp) - 1) {
 				resp[pos++] = c;
 			}
@@ -102,19 +101,16 @@ int main(void)
 
 	printk("Zephyr Sandbox App\n");
 
-	if (!uart) {
+	if (!device_is_ready(esp8266)) {
 		return -1;
 	}
 
-	if (!device_is_ready(bme)) {
+	if (!device_is_ready(baro)) {
 		printk("BME280 is not ready.\n");
 		return 0;
 	}
 
-	// test_uart();
-
-	// regulator_disable(esp_en);
-	// k_sleep(K_SECONDS(3));
+	k_sleep(K_SECONDS(2));
 
 	rv = esp_test_at();
 
@@ -129,41 +125,19 @@ int main(void)
 	char buf[256];
 	int pos = 0;
 
-	struct sensor_value val_temperature, val_humidity, val_pressure;
-
 	while (1) {
-		// uint8_t c;
-		// if (uart_poll_in(uart, &c) == 0) {
-		// 	if (pos < sizeof(buf) - 1) {
-		// 		buf[pos++] = c;
-		// 		// buf[pos] = 0;
-		// 	}
+		uint8_t c;
+		if (uart_poll_in(esp8266, &c) == 0) {
+			if (pos < sizeof(buf) - 1) {
+				buf[pos++] = c;
+				// buf[pos] = 0;
+			}
 
-		// 	if (strstr(buf, "+DIST_STA_IP:")) {
-		// 		send_page_ap(0);
-		// 		pos = 0;
-		// 	}
-		// }
-
-		rv = sensor_sample_fetch(bme);
-		if (rv) {
-			printk("sensor_sample_fetch failed ret %d\n", rv);
-			return 0;
+			if (strstr(buf, "+DIST_STA_IP:")) {
+				send_page_ap(0);
+				pos = 0;
+			}
 		}
-
-		rv = sensor_channel_get(bme, SENSOR_CHAN_AMBIENT_TEMP, &val_temperature);
-		rv = sensor_channel_get(bme, SENSOR_CHAN_PRESS, &val_pressure);
-		rv = sensor_channel_get(bme, SENSOR_CHAN_HUMIDITY, &val_humidity);
-
-		double temp = sensor_value_to_double(&val_temperature);
-		double press = sensor_value_to_double(&val_pressure);
-		double hum = sensor_value_to_double(&val_humidity);
-
-		printf("Temp = %f\r\nHum = %f\r\nPress = %f\r\n",
-			temp,
-			hum,
-			press);
-		k_sleep(K_MSEC(500));
 	}
 
 	return 0;

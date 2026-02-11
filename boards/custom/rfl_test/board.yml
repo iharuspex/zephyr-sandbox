@@ -1,0 +1,5 @@
+board:
+  name: rfl_test
+  vendor: custom
+  socs:
+    - name: stm32f103xb

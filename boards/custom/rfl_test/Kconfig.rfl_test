@@ -1,0 +1,2 @@
+config BOARD_RFL_TEST
+	select SOC_STM32F103X8
