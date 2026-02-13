@@ -12,10 +12,10 @@
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 	};
-};
 
-&pinctrl {
-    swj-cfg = "jtag-disable";
+	pinctrl {
+    	swj-cfg = "jtag-disable";
+	};
 };
 
 &clk_hse {

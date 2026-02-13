@@ -10,8 +10,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define AT_CLIENT_MAX_REPONSE_LEN 1024
-#define AT_CLIENT_RX_RING_BUF_SIZE 2048
+#define AT_CLIENT_MAX_REPONSE_LEN 128
+#define AT_CLIENT_RX_RING_BUF_SIZE 256
 #define AT_CLIENT_CMD_TIMEOUT 5000
 #define AT_CLIENT_MAX_COMMANDS 10
 

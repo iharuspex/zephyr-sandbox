@@ -40,7 +40,7 @@ int main(void)
 
 	if (!device_is_ready(baro)) {
 		printk("BME280 is not ready.\n");
-		return 0;
+		// return 0;
 	}
 
 	k_sleep(K_SECONDS(2));
@@ -48,7 +48,7 @@ int main(void)
 
 	ret = at_client_init(&esp_client, esp8266);
 
-	ret = at_client_send_command_sync(&esp_client, "AT", "OK", response_buf, sizeof(response_buf), 1000);
+	ret = at_client_send_command_sync(&esp_client, "AT", "OK", response_buf, sizeof(response_buf), 5000);
 
 	if (ret < 0) {
 		printk("ESP8266 isn't responding\n");

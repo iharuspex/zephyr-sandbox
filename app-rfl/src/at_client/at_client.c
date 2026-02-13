@@ -1,4 +1,6 @@
 #include "at_client.h"
+#include "syscalls/uart.h"
+#include "zephyr/kernel.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -235,6 +237,14 @@ static void sync_callback(const char *response, void *user_data) {
     k_sem_give(sem);
 }
 
+static int send_uart(const struct device *uart_dev, const uint8_t *command, size_t cmd_len) {
+    for (int i = 0; i < cmd_len; i++) {
+        uart_poll_out(uart_dev, command[i]);
+    }
+
+    return 0;
+}
+
 int at_client_send_command_sync(struct at_client *client,
                             const char *command,
                             const char *expected_response,
@@ -260,14 +270,17 @@ int at_client_send_command_sync(struct at_client *client,
     }
 
     size_t cmd_len = strlen(command);
-    ret = uart_tx(client->uart_dev, (const uint8_t *)command, cmd_len, SYS_FOREVER_MS);
+    // ret = uart_tx(client->uart_dev, (const uint8_t *)command, cmd_len, SYS_FOREVER_MS);
+    ret = send_uart(client->uart_dev, (const uint8_t *)command, cmd_len);
     if (ret < 0) {
         k_mutex_unlock(&client->lock);
         LOG_ERR("Failed to send command: %d", ret);
         return ret;
     }
 
-    ret = uart_tx(client->uart_dev, (const uint8_t *)"\r\n", 2, SYS_FOREVER_MS);
+    // ret = uart_tx(client->uart_dev, (const uint8_t *)"\r\n", 2, SYS_FOREVER_MS);
+    ret = send_uart(client->uart_dev, (const uint8_t *)"\r\n", 2);
+    k_work_submit(&client->rx_work);
     if (ret < 0) {
         k_mutex_unlock(&client->lock);
         LOG_ERR("Failed to send CRLF: %d", ret);
