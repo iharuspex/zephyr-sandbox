@@ -4,8 +4,14 @@
         "sensor.h": "c",
         "typeinfo": "c"
     },
-    "devicetree.defaultBoard": "rocket_flight_logger",
+    "devicetree.defaultBoard": "rfl_test",
     "devicetree.zephyr": "${workspaceFolder}/deps/zephyr/zephyr",
     "sarif-viewer.connectToGithubCodeScanning": "off",
-    "cortex-debug.variableUseNaturalFormat": true
+    "cortex-debug.variableUseNaturalFormat": false,
+    "devicetree.modules": [
+
+        "${zephyrBase}/../*",
+        "${zephyrBase}/../modules/*",
+        "."
+    ]
 }

@@ -6,6 +6,9 @@
         "ms-vscode.cpptools-extension-pack",
         "dan-c-underwood.arm",
         "ms-python.python",
-        "nordic-semiconductor.nrf-devicetree"
+        "nordic-semiconductor.nrf-devicetree",
+        "pkief.material-icon-theme",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "dirsouza.reload-cursor-editor"
     ]
 }

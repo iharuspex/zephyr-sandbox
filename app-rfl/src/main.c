@@ -20,7 +20,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 #define DELAY_MS 300
 
 #define ESP8266_UART DEVICE_DT_GET(DT_NODELABEL(usart2))
-#define BARO_SENSOR DEVICE_DT_GET(DT_NODELABEL(bme280))
+#define BARO_SENSOR DEVICE_DT_GET(DT_NODELABEL(bmp280))
 
 static const struct device *esp8266 = ESP8266_UART;
 static const struct device *baro = BARO_SENSOR;
@@ -39,7 +39,7 @@ int main(void)
 	}
 
 	if (!device_is_ready(baro)) {
-		printk("BME280 is not ready.\n");
+		printk("BMP280 is not ready.\n");
 		// return 0;
 	}
 
@@ -54,6 +54,8 @@ int main(void)
 		printk("ESP8266 isn't responding\n");
 		return 0;
 	}
+
+	ret = at_client_send_command_sync(&esp_client, "ATE0", "OK", response_buf, sizeof(response_buf), 5000);
 
 	while (1) {}
 

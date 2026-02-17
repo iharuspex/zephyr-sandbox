@@ -1,6 +1,3 @@
-#include "zephyr/sys/printk.h"
-#include <stdio.h>
-
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/uart.h>

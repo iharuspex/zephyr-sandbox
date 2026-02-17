@@ -20,7 +20,8 @@ static void uart_cb(const struct device *dev, void *user_data)
             while (uart_fifo_read(dev, &data, 1) == 1) {
                 ring_buf_put(&client->rx_ringbuf, &data, 1);
             }
-            k_sem_give(&client->rx_sem);
+            k_work_submit(&client->rx_work);
+            // k_sem_give(&client->rx_sem);
         }
     }
 }
@@ -101,7 +102,7 @@ static void rx_work_handler(struct k_work *work)
     struct at_client *client = CONTAINER_OF(work, struct at_client, rx_work);
     uint8_t data;
 
-    while (k_sem_take(&client->rx_sem, K_NO_WAIT) == 0) {
+    // while (k_sem_take(&client->rx_sem, K_NO_WAIT) == 0) {
         while (ring_buf_get(&client->rx_ringbuf, &data, 1) == 1) {
             if (data == '\r' || data == '\n') {
                 if (client->rx_line_len > 0) {
@@ -116,7 +117,7 @@ static void rx_work_handler(struct k_work *work)
                 }
             }
         }
-    }
+    // }
 }
 
 static void timeout_work_handler(struct k_work *work)
@@ -280,7 +281,7 @@ int at_client_send_command_sync(struct at_client *client,
 
     // ret = uart_tx(client->uart_dev, (const uint8_t *)"\r\n", 2, SYS_FOREVER_MS);
     ret = send_uart(client->uart_dev, (const uint8_t *)"\r\n", 2);
-    k_work_submit(&client->rx_work);
+    // k_work_submit(&client->rx_work);
     if (ret < 0) {
         k_mutex_unlock(&client->lock);
         LOG_ERR("Failed to send CRLF: %d", ret);

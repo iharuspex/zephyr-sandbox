@@ -12,7 +12,7 @@
             "type": "cortex-debug",
             "runToEntryPoint": "main",
             "servertype": "openocd",
-            "toolchainPrefix": "arm-zephyr-eabi-",
+            "toolchainPrefix": "arm-zephyr-eabi",
             "armToolchainPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/",
             "gdbPath": "/home/haruspex/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
             "configFiles": [
