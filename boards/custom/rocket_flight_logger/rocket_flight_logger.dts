@@ -74,19 +74,15 @@
 	status = "okay";
 	cs-gpios = <&gpioa 15 GPIO_ACTIVE_LOW>;
 
-	at45: at45db641e@0 {
-		compatible = "atmel,at45";
-		label = "AT45";
+	w25q16bv: w25q16bv@0 {
+		compatible = "jedec,spi-nor";
 		spi-max-frequency = <10000000>;
 		reg = <0>;
-
-		jedec-id = [1f 28 00];
-		size = <67108864>;
-		sector-size = <270336>;
-		block-size = <2112>;
-		page-size = <264>;
-		// enter-dpd-delay = <>;
-		// exit-dpd-delay = <>;
+		size = <DT_SIZE_M(16)>;
+		jedec-id = [ef 40 15];
+		has-dpd;
+		t-enter-dpd = <3500>;
+		t-exit-dpd = <3500>;
 
 		partitions {
 			compatible = "fixed-partitions";
@@ -95,7 +91,7 @@
 
 			storage_partition: partition@0 {
 				label = "storage";
-				reg = <0x00000000 0x00100000>;
+				reg = <0x00000000 DT_SIZE_M(2)>;
 			};
 		};
 	};

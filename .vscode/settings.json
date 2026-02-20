@@ -13,5 +13,6 @@
         "${zephyrBase}/../*",
         "${zephyrBase}/../modules/*",
         "."
-    ]
+    ],
+    "editor.fontFamily": "'JetBrains Mono', monospace"
 }
